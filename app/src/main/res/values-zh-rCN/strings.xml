@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">生日贺卡程序</string>
+    <string name="hello">生日快乐！</string>
+    <string name="from">你的小天使</string>
+</resources>
