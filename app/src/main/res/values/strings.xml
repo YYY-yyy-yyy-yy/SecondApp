@@ -2,4 +2,12 @@
     <string name="app_name">SecondApp</string>
     <string name="hello">Hello Birthday</string>
     <string name="from">Your Angel</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next" translatable="false">Next</string>
+    <string name="previous" translatable="false">Previous</string>
+
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="tip">Please enter Celsius</string>
+    <string name="con">Convert to Fahrenheit</string>
+    <string name="res">result：</string>
 </resources>
