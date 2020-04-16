@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 public class JifenActivity extends AppCompatActivity {
-    //重新上传
+    //重新上传111
     TextView score;
     TextView score2;
     @Override
