@@ -9,19 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RateActivity">
+        <activity android:name=".RateplusActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JifenteamActivity">
+        <activity android:name=".RateActivity">
+
         </activity>
-        <activity android:name=".WenduActivity">
-        </activity>
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".JifenteamActivity" />
+        <activity android:name=".WenduActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
