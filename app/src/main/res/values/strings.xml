@@ -10,4 +10,8 @@
     <string name="tip">Please enter Celsius</string>
     <string name="con">Convert to Fahrenheit</string>
     <string name="res">result：</string>
+    <string name="label_add3" translatable="false">+3points</string>
+    <string name="label_add2" translatable="false">+2points</string>
+    <string name="label_add1" translatable="false">+1point</string>
+    <string name="btn_reset_label" translatable="false">Reset</string>
 </resources>
