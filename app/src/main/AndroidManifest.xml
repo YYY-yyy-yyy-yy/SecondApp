@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RateplusActivity">
+        <activity android:name=".JifenteamActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,11 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".RateActivity">
-
+        <activity android:name=".WenduActivity">
         </activity>
-        <activity android:name=".JifenteamActivity" />
         <activity android:name=".WenduActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
