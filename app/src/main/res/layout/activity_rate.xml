@@ -11,42 +11,4 @@
     android:paddingLeft="16dp"
     tools:context=".RateActivity" >
 
-    <EditText
-        android:id="@+id/rmb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:inputType="numberDecimal"
-        android:hint="@string/rmb_hint" />
-
-    <TextView
-        android:id="@+id/showOut"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="35sp"
-        android:gravity="center"
-        android:text="@string/hello" />
-
-    <Button
-        android:id="@+id/btn_dollar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="@string/btn_dollar_label" />
-
-    <Button
-        android:id="@+id/btn_euro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="@string/btn_euro_label" />
-
-    <Button
-        android:id="@+id/btn_won"
-        android:onClick="onClick"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_won_label" />
-
-
 </LinearLayout>
