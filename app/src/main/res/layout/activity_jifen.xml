@@ -9,7 +9,6 @@
     android:paddingRight="24dp"
     tools:context=".JifenActivity">
 
-
     <Button
         android:id="@+id/btn_reset"
         android:layout_width="wrap_content"
@@ -24,52 +23,120 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/teamName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="TeamA"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="24dp"
+                android:text="0"
+                android:textSize="65sp" />
+
+            <Button
+                android:id="@+id/btn_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd3"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add3" />
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd2"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add2" />
+
+            <Button
+                android:id="@+id/btn_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd1"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add1" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/teamName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="16dp"
-            android:text="TeamA" />
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="0"
-            android:paddingBottom="24dp"
-            android:textSize="65sp" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="btnAdd3"
-            android:paddingBottom="16dp"
-            android:text="@string/label_add3" />
 
-        <Button
-            android:id="@+id/btn_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="btnAdd2"
-            android:paddingBottom="16dp"
-            android:text="@string/label_add2" />
+            <TextView
+                android:id="@+id/teamNameb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="TeamB"
+                android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/btn_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="btnAdd1"
-            android:paddingBottom="16dp"
-            android:text="@string/label_add1" />
+            <TextView
+                android:id="@+id/score2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="24dp"
+                android:text="0"
+                android:textSize="65sp" />
 
+            <Button
+                android:id="@+id/btn_3b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd3"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add3" />
+
+            <Button
+                android:id="@+id/btn_2b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd2"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add2" />
+
+            <Button
+                android:id="@+id/btn_1b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="btnAdd1"
+                android:paddingBottom="16dp"
+                android:text="@string/label_add1" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
 </RelativeLayout>
