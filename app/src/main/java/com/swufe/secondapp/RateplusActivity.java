@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,14 +18,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RateplusActivity extends AppCompatActivity {
-//add nothing ,just for push
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+public class RateplusActivity extends AppCompatActivity implements Runnable{
     private final String TAG = "Rate";
     private float dollarRate =0.1f;
     private float euroRate =0.2f;
     private float wonRate =0.3f;
     EditText rmb;
     TextView show;
+    Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +50,28 @@ public class RateplusActivity extends AppCompatActivity {
         Log.i(TAG,"sp dollar_rate:"+dollarRate);
         Log.i(TAG,"sp euro_rate:"+euroRate);
         Log.i(TAG,"sp won_rate:"+wonRate);
+
+        Thread t = new Thread(this);
+        t.start();
+
+        handler = new Handler(){
+            public void handleMessage(Message msg){
+                if(msg.what == 5){
+                    Bundle bdl = (Bundle)msg.obj;
+                    dollarRate = bdl.getFloat("dollar-rate");
+                    euroRate = bdl.getFloat("euro-rate");
+                    wonRate = bdl.getFloat("won-rate");
+
+                    Log.i(TAG,"handleMessage:dollarRate:" + dollarRate);
+                    Log.i(TAG,"handleMessage:euroRate:" + euroRate);
+                    Log.i(TAG,"handleMessage:wonRate:" + wonRate);
+
+                    Toast.makeText(RateplusActivity.this,"汇率已更新",Toast.LENGTH_SHORT).show();
+                }
+                super.handleMessage(msg);
+            }
+        };
+
     }
     public void onClick(View btn){
         String str = rmb.getText().toString();
@@ -108,5 +142,88 @@ public class RateplusActivity extends AppCompatActivity {
             startActivityForResult(config,1);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void run() {
+        Log.i(TAG,"run:run()....");
+        try{
+            Thread.sleep(2000);
+        }catch (InterruptedException E){
+            E.printStackTrace();
+        }
+
+        Bundle bundle = new Bundle();
+
+
+        //获取网络数据
+//        URL url = null;
+//        try {
+//            url = new URL("https://www.usd-cny.com/bankofchina.htm");
+//            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//            InputStream in = http.getInputStream();
+//
+//            String html=inputStream2String(in);
+//            Log.i(TAG,"run: html="+ html);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        Document doc = null;
+        try {
+            doc = Jsoup.connect("https://www.usd-cny.com/bankofchina.htm").get();
+            Log.i(TAG,"run:"+ doc.title());
+            Elements tables = doc.getElementsByTag("table");
+//            int i=1;
+//            for(Element table:tables){
+//                Log.i(TAG,"run:table["+i+"]" + table);
+//                i++;
+//            }
+            Element table1 = tables.get(0);
+//            Log.i(TAG,"run:table6="+table1);
+            Elements tds = table1.getElementsByTag("td");
+            for (int i = 0;i<tds.size();i+=6){
+                Element td1 = tds.get(i);
+                Element td2 = tds.get(i+5);
+                Log.i(TAG,"run:" + td1.text() +"==>"+ td2.text());
+
+                String str1 = td1.text();
+                String val = td2.text();
+
+                if("美元".equals(str1)){
+                    bundle.putFloat("dollar-rate",100f/Float.parseFloat(val));
+                }else if("欧元".equals(str1)){
+                    bundle.putFloat("euro-rate",100f/Float.parseFloat(val));
+                }else if("韩元".equals(str1)){
+                    bundle.putFloat("won-rate",100f/Float.parseFloat(val));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Message msg = handler.obtainMessage(5);
+//        //msg.what = 5;
+//        msg.obj = "Hello from run()";
+        msg.obj = bundle;
+        handler.sendMessage(msg);
+
+    }
+
+    private String inputStream2String(InputStream inputStream) throws IOException {
+        final int bufferSize = 1024;
+        final char[] buffer = new char[bufferSize];
+        final StringBuilder out = new StringBuilder();
+        Reader in = new InputStreamReader(inputStream,"gb2312");
+        for(;;){
+            int rsz = in.read(buffer,0,buffer.length);
+            if(rsz<0)
+                break;
+            out.append(buffer,0,rsz);
+        }
+        return out.toString();
+
     }
 }
