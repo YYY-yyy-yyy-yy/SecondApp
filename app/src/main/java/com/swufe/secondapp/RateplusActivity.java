@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RateplusActivity extends AppCompatActivity {
-
+//add nothing ,just for push
     private final String TAG = "Rate";
     private float dollarRate =0.1f;
     private float euroRate =0.2f;
