@@ -3,6 +3,8 @@ package com.swufe.secondapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.jsoup.Jsoup;
@@ -28,6 +31,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class RateplusActivity extends AppCompatActivity implements Runnable{
@@ -37,9 +42,9 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
     private float dollarRate=0.1f;
     private float euroRate=0.2f;
     private float wonRate=0.3f;
-    public static int count=0;
     Handler handler;
-
+    private String updateDate="";
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +58,32 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
         dollarRate=sp.getFloat("dollar_rate",0.0f);
         euroRate=sp.getFloat("euro_rate",0.0f);
         wonRate=sp.getFloat("won_rate",0.0f);
+        updateDate = sp.getString("update_date","");
+
         Log.i(TAG, "onCreate: sp dollarRate=" + dollarRate);
         Log.i(TAG, "onCreate: sp euroRate=" + euroRate);
         Log.i(TAG , "onCreate: sp wonRate=" + wonRate);
 
-        //开启子线程
-        Thread t=new Thread(this);
-        t.start();
+        //获取当前系统时间
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        final String todayStr = sdf.format(today);
+
+        Log.i(TAG,"todayStr:"+todayStr);
+
+        //判断时间
+        if(!todayStr.equals((today))){
+            Log.i(TAG,"需要更新");
+            //开启子线程
+            Thread t=new Thread(this);
+            t.start();
+        }else {
+            Log.i(TAG,"不需要更新");
+        }
+
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg){
-
                 if(msg.what==5){
                     Bundle bdl=(Bundle)msg.obj;
                     dollarRate=bdl.getFloat("dollar-rate");
@@ -74,6 +94,14 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
                     Log.i("handleMessage", "wonRate=" + wonRate);
                     Toast.makeText(RateplusActivity.this,"汇率更新",Toast.LENGTH_SHORT).show();
 
+                    //保存更新的日期
+                    SharedPreferences sp=getSharedPreferences("myrate", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sp.edit();
+                    editor.putString("update_date",todayStr);
+                    editor.putFloat("dollar_rate",dollarRate);
+                    editor.putFloat("euro_rate",euroRate);
+                    editor.putFloat("won_rate",wonRate);
+                    editor.apply();
 
                 }
                 super.handleMessage(msg);
@@ -108,12 +136,7 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
 
     }
     public void openOne(View btn){
-        //Log.i("open","openOne:");
-        //Intent hello=new Intent(this,SecondActivity.class);
-        //Intent web=new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.jd.com"));
-        // Intent intent=new Intent(Intent.ACTION_DIAL, Uri.parse("tel:13880321454"));
         Intent config = openConfig();
-        //startActivity(config);
         startActivityForResult(config,1);
     }
 
@@ -131,9 +154,6 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==1 &&resultCode==2 ){
-            /*bdl.putFloat("key_dollar",newDollar);
-            bdl.putFloat("key_euro",newEuro);
-            bdl.putFloat("key_won",newWon);*/
             Bundle bundle= null;
             if (data != null) {
                 bundle = data.getExtras();
@@ -178,7 +198,6 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
     public void run() {
         Log.i(TAG, "run: run()......");
         Bundle bundle = new Bundle();
-        count++;
         Document doc;
             try {
                 doc = Jsoup.connect("https://www.usd-cny.com/bankofchina.htm").get();
@@ -196,6 +215,7 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
                     } else if ("韩元".equals(str1)) {
                         bundle.putFloat("won-rate", 100f / Float.parseFloat(val));
                     }
+                    Log.i(TAG,"判断完成");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -203,6 +223,7 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
             Message msg = handler.obtainMessage(5);
             msg.obj = bundle;
             handler.sendMessage(msg);
+            Log.i(TAG,"HANDLE");
         }
 
     private String inputStream2String(InputStream inputStream) throws  IOException {
