@@ -1,6 +1,5 @@
 package com.swufe.secondapp;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Calendar;
 
 
 public class RateplusActivity extends AppCompatActivity implements Runnable{
@@ -41,27 +39,14 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
     private float wonRate=0.3f;
     public static int count=0;
     Handler handler;
-    Calendar calendar = Calendar.getInstance();
-    public static int mYear;
-    public static int mMonth;     //第一次获取日期的月
-    public static int mDay;      //第一次获取日期的天
-    Calendar calendar2 = Calendar.getInstance();
-    int mYear2;
-    int mMonth2;     //获取日期的月
-    int mDay2;      //获取日期的天
 
-    @SuppressLint("HandlerLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate);
         rmb=findViewById(R.id.rmb);
         show=findViewById(R.id.showOut);
-        //获取时间
-        mYear2 = Integer.parseInt((String.valueOf(calendar2.get(Calendar.YEAR))));
-        mMonth2 = Integer.parseInt(String.valueOf(calendar2.get(Calendar.MONTH) + 1));
-        mDay2 = Integer.parseInt(String.valueOf(calendar2.get(Calendar.DAY_OF_MONTH)));
-        Log.i(TAG, "time:" +mYear2+" ！！ "+ mMonth2+"  "+mDay2);
+
         //获得sp中保存的数据
         SharedPreferences sp=getSharedPreferences("myrate", Activity.MODE_PRIVATE);
         SharedPreferences s=PreferenceManager.getDefaultSharedPreferences(this);//名字不能改
@@ -71,6 +56,7 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
         Log.i(TAG, "onCreate: sp dollarRate=" + dollarRate);
         Log.i(TAG, "onCreate: sp euroRate=" + euroRate);
         Log.i(TAG , "onCreate: sp wonRate=" + wonRate);
+
         //开启子线程
         Thread t=new Thread(this);
         t.start();
@@ -87,6 +73,8 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
                     Log.i("handleMessage", "euroRate=" + euroRate);
                     Log.i("handleMessage", "wonRate=" + wonRate);
                     Toast.makeText(RateplusActivity.this,"汇率更新",Toast.LENGTH_SHORT).show();
+
+
                 }
                 super.handleMessage(msg);
             }
@@ -192,11 +180,6 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
         Bundle bundle = new Bundle();
         count++;
         Document doc;
-        if (count<=1||mYear!=mYear2||mMonth!=mMonth2||mDay!=mDay2) {
-            mYear = Integer.parseInt(String.valueOf(calendar.get(Calendar.YEAR)));
-            mMonth = Integer.parseInt(String.valueOf(calendar.get(Calendar.MONTH) + 1));
-            mDay = Integer.parseInt(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
-            Log.i(TAG, "time:" +mYear+"    "+ mMonth+"  "+mDay);
             try {
                 doc = Jsoup.connect("https://www.usd-cny.com/bankofchina.htm").get();
                 Log.i(TAG, "run:" + doc.title());
@@ -221,7 +204,7 @@ public class RateplusActivity extends AppCompatActivity implements Runnable{
             msg.obj = bundle;
             handler.sendMessage(msg);
         }
-    }
+
     private String inputStream2String(InputStream inputStream) throws  IOException {
         final int bufferSize = 1024;
         final char[] buffer = new char[bufferSize];
